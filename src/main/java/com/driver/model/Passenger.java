@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class Passenger {
 
     @ManyToMany
     @JoinColumn
-    private List<Ticket> bookedTickets;
+    private List<Ticket> bookedTickets=new ArrayList<>();
 
     public Passenger(int passengerId, String name, int age, List<Ticket> bookedTickets) {
         this.passengerId = passengerId;
