@@ -59,9 +59,22 @@ public class TicketService {
          ticket.setFromStation(bookTicketEntryDto.getFromStation());
          ticket.setToStation(bookTicketEntryDto.getToStation());
          ticket.setTrain(train);
-         List<Passenger>passengers=new ArrayList<>();
+         String []root=train.getRoute().split(",");
+         int fair=0;
+         for(int i=0;i<root.length;i++){
+             if(bookTicketEntryDto.getFromStation().toString().equals(root[i])){
+                 while(!bookTicketEntryDto.getToStation().toString().equals(root[i])){
+                     fair+=300;
+                     i++;
+                 }
+             }
+         }
+         ticket.setTotalFare(fair);
+         List<Passenger>passengers=ticket.getPassengersList();
          for(int i:bookTicketEntryDto.getPassengerIds()){
              Passenger passenger=passengerRepository.findById(i).get();
+             List<Ticket>t=passenger.getBookedTickets();
+             t.add(ticket);
              passengers.add(passenger);
          }
         ticket.setPassengersList(passengers);
@@ -99,15 +112,19 @@ public class TicketService {
         if(!map.containsKey(seatAvailabilityEntryDto.getFromStation().toString())||!map.containsKey(seatAvailabilityEntryDto.getToStation().toString())){
             return 0;
         }
-        int count=train.getNoOfSeats()-ticketList.size();
+        int noOfPassengers=0;
+        for(Ticket ticket:ticketList){
+            noOfPassengers+=ticket.getPassengersList().size();
+        }
+        int count=train.getNoOfSeats()-noOfPassengers;
         for(Ticket t:ticketList){
             String fromStation=t.getFromStation().toString();
             String toStation=t.getToStation().toString();
             if(map.get(seatAvailabilityEntryDto.getToStation().toString())<=map.get(fromStation)){
-                count++;
+                count+=t.getPassengersList().size();
             }
             else if (map.get(seatAvailabilityEntryDto.getFromStation().toString())>=map.get(toStation)){
-                count++;
+                count+=t.getPassengersList().size();
             }
         }
         return count;
