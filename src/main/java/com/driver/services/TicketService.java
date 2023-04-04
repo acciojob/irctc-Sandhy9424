@@ -105,7 +105,7 @@ public class TicketService {
         Train train=trainRepository.findById(seatAvailabilityEntryDto.getTrainId()).get();
         List<Ticket>ticketList=train.getBookedTickets();
         String []trainRoot=train.getRoute().split(",");
-        HashMap<String,Integer> map=new HashMap<>();
+        HashMap<String,Integer>map=new HashMap<>();
         for(int i=0;i<trainRoot.length;i++){
             map.put(trainRoot[i],i);
         }
