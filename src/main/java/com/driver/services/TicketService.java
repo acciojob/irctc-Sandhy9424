@@ -85,11 +85,11 @@ public class TicketService {
         List<Ticket>tickets=train.getBookedTickets();
         tickets.add(ticket);
         train.setBookedTickets(tickets);
-         ticketRepository.save(ticket);
+        Ticket updatedTicket=ticketRepository.save(ticket);
          passengerRepository.save(passenger);
          trainRepository.save(train);
 
-       return ticket.getTicketId();
+       return updatedTicket.getTicketId();
 
     }
     public Integer calculateAvailableSeats(SeatAvailabilityEntryDto seatAvailabilityEntryDto){
