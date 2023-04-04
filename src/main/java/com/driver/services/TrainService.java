@@ -40,8 +40,8 @@ public class TrainService {
             }
         }
         train.setRoute(trainRoot);
-        trainRepository.save(train);
-        return train.getTrainId();
+        Train updatedTrain=trainRepository.save(train);
+        return updatedTrain.getTrainId();
     }
 
     public Integer calculateAvailableSeats(SeatAvailabilityEntryDto seatAvailabilityEntryDto){
